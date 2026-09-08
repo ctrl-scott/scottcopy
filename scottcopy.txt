@@ -1,0 +1,52 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+//#define BUFFER_SIZE 4095
+
+
+
+int main(int argc, char *argv[]) {
+	//check argument count and array
+	//int argc then argv[0] = should be program name
+	//argv[1] should be source or original file to copy
+	//argc[2] should be the destination or newly copied file
+
+	if (argc != 3){
+	  printf("Usage: %s <source_file> <destination_file>\n",argv[0]);
+	return 1;
+	}
+
+	//Declare holders as variables for the files
+	FILE *in_file;
+	FILE *out_file;
+	int c; //this has to be int to correctly catch EOF (end of file)
+
+	//open for reading in binary or "rb"
+	in_file = fopen(argv[1], "rb"); //the source file
+	if (in_file == NULL) {
+		perror("Error opening source file");
+	return 1;
+	}
+	
+	//open the destination file for "wb" or write binary
+	out_file = fopen(argv[2], "wb");
+	if (out_file == NULL) {
+		perror("Error creating destination file");
+	fclose(in_file);
+	return 1;
+	}
+	
+	//copy the content as it is 
+	while ((c = fgetc(in_file)) != EOF) {
+	 fputc(c, out_file);
+	}
+
+	printf("File copied successfully from %s to %s\n", argv[1], argv[2]);
+
+	//close stream handlers
+	fclose(in_file);
+	fclose(out_file);
+
+	return 0;
+
+}
